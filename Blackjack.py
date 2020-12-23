@@ -65,23 +65,31 @@ def hand_value():
 def hit():
     gambler.add_cards(new_deck.deal_one())
 
+chips = 500
+pot = 0
 def bet():
     global chips
     global pot
-    amount = int(input(f"How much do you want to bet? Available chips: {chips}\n"))
-    chips -= amount
+    while True:
+        amount = int(input(f"How much do you want to bet? Available chips: {chips}\n"))
+        if amount <= chips:
+            chips -= amount
+            break
+        else:
+            print("You do not have enough chips!")
     pot += amount
 
 def decision():
     while True:
         another_card = input("Would you like another card? (yes/no)\n")
         if another_card.lower() == "yes":
-            return True
+            hit()
+            print(hand_value())
         elif another_card.lower() == "no":
             return False
         else:
             print("Incorrect input!")
-            
+
 print("Welcome to BlackJack!")
 
 dealer = Player("Dealer")
