@@ -6,15 +6,17 @@ ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
 values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 'Nine':9, 'Ten':10, 'Jack':10,
          'Queen':10, 'King':10, 'Ace':11}
 
-class Card():
+class Card:
     
-    def __init__(self, suit, rank, value):
+    def __init__(self,suit,rank):
         self.suit = suit
         self.rank = rank
-        self.value = value[rank]
-    
+        self.value = values[rank]
+        
     def __str__(self):
-        return self.suit + "of" + self.rank
+        return self.rank + ' of ' + self.suit
+
+two_hearts = Card(suits[0],ranks[0])
 
 class Deck:
     
@@ -54,14 +56,41 @@ class Player:
     def __str__(self):
         return f'Player {self.name} has {len(self.all_cards)} cards.'
 
+def hand_value():
+    result = 0
+    for i in range(len(gambler.all_cards)):
+        result += gambler.all_cards[i].value
+    return result
+
+def hit():
+    gambler.add_cards(new_deck.deal_one())
+
+def bet():
+    global chips
+    global pot
+    amount = int(input(f"How much do you want to bet? Available chips: {chips}\n"))
+    chips -= amount
+    pot += amount
+
+def decision():
+    while True:
+        another_card = input("Would you like another card? (yes/no)\n")
+        if another_card.lower() == "yes":
+            return True
+        elif another_card.lower() == "no":
+            return False
+        else:
+            print("Incorrect input!")
+            
+print("Welcome to BlackJack!")
+
 dealer = Player("Dealer")
 player_name = input("Whats your name?: ")
-player = Player(player_name)
+gambler = Player(player_name)
 
 new_deck = Deck()
 new_deck.shuffle()
 
 chips = 500
-
-bet = int(input("How much would you like to bet? Available chips:", chips, "\n"))
+pot = 0
 # tomorrow
