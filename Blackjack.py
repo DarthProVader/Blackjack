@@ -71,13 +71,16 @@ def bet():
     global chips
     global pot
     while True:
-        amount = int(input(f"How much do you want to bet? Available chips: {chips}\n"))
-        if amount <= chips:
-            chips -= amount
-            break
+        amount = input(f"How much do you want to bet? Available chips: {chips}\n")
+        if amount.isdigit() == True and int(amount) > 0:
+            if int(amount) <= chips:
+                chips -= int(amount)
+                break
+            else:
+                print("You do not have enough chips!")
         else:
-            print("You do not have enough chips!")
-    pot += amount
+            print("Incorrect input!")
+    pot += int(amount)
 
 def decision():
     while True:
@@ -173,7 +176,16 @@ while game_on == True:
     
     print("-"*7+"GAME ON?"+"-"*7)
     print(f"Available chips: {chips}")
-    game_off = input("Press 1 if you wish to continue gambling.\nPress 2 if you wish to cash out.\n")
-    if game_off == "2":
+    if chips > 0:
+        game_off = input("Press 1 if you wish to continue gambling.\nPress 2 if you wish to cash out.\n")
+        if game_off == "2":
+            game_on = False
+    else:
+        print("Not enough chips for another game, cashing out...")
         game_on = False
-print(f"Here's your imaginary {chips} chips. Buy yourself something nice!")
+
+print("-"*7+"CASH OUT"+"-"*7)
+if chips > 0:
+    print(f"Here's your imaginary {chips} chips. Buy yourself something nice!")
+else:
+    print("Try knitting, gambling is not for you.")
