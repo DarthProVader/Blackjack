@@ -1,6 +1,6 @@
 
 import random
-
+# lists and dictionary to create a deck of cards
 suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
 ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
 values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 'Nine':9, 'Ten':10, 'Jack':10,
@@ -42,9 +42,6 @@ class Player:
         self.all_cards = [] 
         
     def remove_one(self):
-        # Note we remove one card from the list of all_cards
-        # We state 0 to remove from the "top" of the deck
-        # We'll imagine index -1 as the bottom of the deck
         return self.all_cards.pop(0)
     
     def add_cards(self,new_cards):
@@ -56,12 +53,14 @@ class Player:
     def __str__(self):
         return f'Player {self.name} has {len(self.all_cards)} cards.'
 
+# shows current value of a hand by adding values of each card
 def hand_value(player):
     result = 0
     for i in range(len(player.all_cards)):
         result += player.all_cards[i].value
     return result
 
+# take additional card
 def hit(player):
     player.add_cards(new_deck.deal_one())
 
@@ -82,6 +81,7 @@ def bet():
             print("Incorrect input!")
     pot += int(amount)
 
+# game itself - decision to take another card or not
 def decision():
     while True:
         if hand_value(gambler) <= 21:
@@ -97,6 +97,7 @@ def decision():
         else:
             return True
 
+# dealer automatically takes one card if hand value us below 17
 def dealer_turn():
     dealer.all_cards = []
     for i in range(2):
@@ -105,6 +106,7 @@ def dealer_turn():
         hit(dealer)
     return hand_value(dealer)
 
+# checks who wins and returns value for commentator
 def game_eval():
     if hand_value(dealer) <= 21 and hand_value(gambler) <= 21:
         if hand_value(dealer) > hand_value(gambler):
@@ -118,6 +120,7 @@ def game_eval():
     else:
         return 1
 
+# prints results
 def commentator(arg):
     global pot
     global chips
@@ -134,6 +137,7 @@ def commentator(arg):
         chips += pot
         pot = 0
 
+# prints player's hand 
 def hand_print(player):
     print("-"*10+"HAND"+"-"*10)
     print("Cards:")
@@ -153,16 +157,17 @@ new_deck.shuffle()
 game_on = True
 
 while game_on == True:
-    gambler.all_cards = []
+    gambler.all_cards = [] #resets cards 
     print("-"*10+"BET"+"-"*10)
     bet()
     print(f"Pot: {pot}")
-    for i in range(2):
+    for i in range(2): #deal 2 cards
         gambler.add_cards(new_deck.deal_one())
 
     hand_print(gambler)
     over21 = decision()
 
+    # ends the game immediately if a hand value is over 21
     if over21 == False:
         print("-"*7+"DEALER TURN"+"-"*6)
         dealer_turn()
@@ -174,6 +179,7 @@ while game_on == True:
         print(f"Your hand value: {hand_value(gambler)}\n{dealer.name} wins.\nChips removed from pot: {pot}")
         pot = 0
     
+    # can continue to play only if chips are available
     print("-"*7+"GAME ON?"+"-"*7)
     print(f"Available chips: {chips}")
     if chips > 0:
@@ -184,6 +190,7 @@ while game_on == True:
         print("Not enough chips for another game, cashing out...")
         game_on = False
 
+# cheer up messages
 print("-"*7+"CASH OUT"+"-"*7)
 if chips > 0:
     print(f"Here's your imaginary {chips} chips. Buy yourself something nice!")
